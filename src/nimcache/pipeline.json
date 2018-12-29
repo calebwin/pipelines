@@ -1,0 +1,20 @@
+{"compile":[
+],
+"link":[
+"/home/calebwin/Projects/pipeline/src/nimcache/pipeline.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_system.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/python_python.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_dynlib.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_strutils.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_parseutils.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_math.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_algorithm.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_os.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_times.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_posix.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_ospaths.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_tables.o",
+"/home/calebwin/Projects/pipeline/src/nimcache/stdlib_hashes.o"
+],
+"linkcmd": "gcc   -o /home/calebwin/Projects/pipeline/src/pipeline  /home/calebwin/Projects/pipeline/src/nimcache/pipeline.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_system.o /home/calebwin/Projects/pipeline/src/nimcache/python_python.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_dynlib.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_strutils.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_parseutils.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_math.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_algorithm.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_os.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_times.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_posix.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_ospaths.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_tables.o /home/calebwin/Projects/pipeline/src/nimcache/stdlib_hashes.o  -lm -lrt   -ldl"
+}

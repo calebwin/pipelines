@@ -1,0 +1,5 @@
+generator from fizzbuzz/generator
+fizzbuzz from fizzbuzz/fizzbuzz
+printer from fizzbuzz/printer
+
+generator | fizzbuzz | printer
