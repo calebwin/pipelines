@@ -8,8 +8,8 @@ As an example, a pipeline for Fizz Buzz could be written as follows -
 
 ```lua
 generator from fizzbuzz/generator
-fizzbuzz from fizzbuzz/fizzbuzz
-printer from fizzbuzz/printer
+fizzbuzz  from fizzbuzz/fizzbuzz
+printer   from fizzbuzz/printer
 
 generator | fizzbuzz | printer
 ```
