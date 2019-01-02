@@ -1,5 +1,8 @@
-generator from fizzbuzz/generator
+numbers  from fizzbuzz/numbers
+even     from fizzbuzz/even
 fizzbuzz from fizzbuzz/fizzbuzz
-printer from fizzbuzz/printer
+printer  from fizzbuzz/printer
 
-generator | fizzbuzz | printer
+numbers /> even 
+|> fizzbuzz where (number=*, fizz="Foo", buzz="Bar")
+|> printer

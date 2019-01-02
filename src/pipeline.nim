@@ -1,9 +1,13 @@
 import python # TODO support python3
 import os, strutils, tables
 
+const debug = false
+
 type
   Path = tuple[module: string, function: string] # path to a function - defined by name of module and name of function in it
-  Pipe = tuple[origin: string, destination: string] # pipe between 2 components - defined by origin component and destination component
+  Pipe = tuple[origin: string, parameters: string, destination: string, pipeType: Pipes] # pipe between 2 components - defined by origin component and destination component
+  Pipes = enum
+    pTransformer, pFilter
 
 # compiles pipeline document at given path to python code
 proc compile*(path: string): string =
@@ -17,31 +21,66 @@ proc compile*(path: string): string =
     pipes: seq[Pipe] = @[] # pipes connecting components
 
   # get tokens from contents
-  let tokens: seq[string] = splitWhitespace(contents)
+  var 
+    tokens: seq[string] = @[]
+    token: string = ""
+    index: int = 0
+  # iterate through characters in contents
+  while index <= contents.len - 1:
+    let character: string = $contents[index] # get character at current index
+
+    # handle character being an end-of-token character
+    if character.isNilOrWhitespace or character == "(":
+      if token.strip().len > 0: 
+        tokens.add(token.strip()) # add token to tokens if current character is an end-of-token-character
+      token = ""
+
+    # handle character being start of parameter declaration
+    if character == "(":
+      let parameterDeclaration: string = contents[index .. contents.find(')', index)] # get whole parameter declaration
+      tokens.add(parameterDeclaration)
+      index = contents.find(')', index) + 1 # move to end of parameter declaration
+    else:
+      token &= character # otherwise, append character to token
+      # the character is only appended if it's not the end of a token or the start of a parameter declaration
+      index += 1 # move to next character
 
   # parse tokens to paths and pipes
-  var index: int = 0
+  var tokenIndex: int = 0
   for token in tokens:
     case token:
     of "from":
-      # parse statement
+      # parse import statement
       let
-        nextToken: string = tokens[index + 1] # next token from contents
-        newPathAlias: string = tokens[index - 1] # alias of new path
+        nextToken: string = tokens[tokenIndex + 1] # next token from contents
+        newPathAlias: string = tokens[tokenIndex - 1] # alias of new path
         newPathModule: string = nextToken[0 .. nextToken.rfind("/") - 1] # module for new path
         newPathFunction: string = nextToken[nextToken.rfind("/") + 1 .. nextToken.len - 1] # function for new path
         newPath: Path = (module : newPathModule, function : newPathFunction) # new path
 
       # add new path to paths
       paths[newPathAlias] = newPath
-    of "|":
-      # parse statement
+    of "|>":
+      # parse tranformer pipe statement
       let
-        prevToken: string = tokens[index - 1] # previous token from contents
-        nextToken: string = tokens[index + 1] # next token from contnets
+        prevToken: string = tokens[tokenIndex - 1] # previous token from contents
+        nextToken: string = tokens[tokenIndex + 1] # next token from contnets
         newPipeOrigin: string = prevToken # origin of new pipe
         newPipeDestination: string = nextToken # destination of new pipe
-        newPipe: Pipe = (origin : newPipeOrigin, destination : newPipeDestination)  # new pipe
+        newPipeParameters: string = if tokenIndex + 3 <= tokens.len - 1 and tokens[tokenIndex + 2] == "where": tokens[tokenIndex + 3] else: "(*)" # get parameters of pipe
+        newPipe: Pipe = (origin : newPipeOrigin, parameters : newPipeParameters, destination : newPipeDestination, pipeType : pTransformer)  # new pipe
+
+      # add new pipe
+      pipes.add(newPipe)
+    of "/>":
+      # parse filter pipe statement
+      let
+        prevToken: string = tokens[tokenIndex - 1] # previous token from contents
+        nextToken: string = tokens[tokenIndex + 1] # next token from contnets
+        newPipeOrigin: string = prevToken # origin of new pipe
+        newPipeDestination: string = nextToken # destination of new pipe
+        newPipeParameters: string = if tokenIndex + 3 <= tokens.len - 1 and tokens[tokenIndex + 2] == "where": tokens[tokenIndex + 3] else: "(*)" # get parameters of pipe
+        newPipe: Pipe = (origin : newPipeOrigin, parameters : newPipeParameters, destination : newPipeDestination, pipeType : pFilter)  # new pipe
 
       # add new pipe
       pipes.add(newPipe)
@@ -49,7 +88,7 @@ proc compile*(path: string): string =
       discard
 
     # update index
-    index += 1
+    tokenIndex += 1
 
   # (2) generate target code
 
@@ -69,44 +108,87 @@ proc compile*(path: string): string =
   # define pipe sentinel
   code &= "class PipeSentinel: pass\n"
 
+  # define function to run generator
+  let generatorName: string = pipes[0].origin
+
+  code &= "def run_" & generatorName & "(stream, out_queue):\n"
+  code &= "\tfor data in stream:\n"
+  code &= "\t\tout_queue.put(data)\n"
+  code &= "\tout_queue.put(PipeSentinel())\n"
+
   # define functions for process for each component
   for pipe in pipes:
-    let component: string = pipe.destination # destination of pipe ~ the component to define a function for
+    let 
+      component: string = pipe.destination # destination of pipe ~ the component to define a function for
+      parameters: string = pipe.parameters.replace("*", "input") # parameters of pipe
 
     var componentCode: string = "" # code for running component
 
-    # loop indefinitely
-    componentCode &= "while True:\n"
+    case pipe.pipeType:
+    # handle normal pipe
+    of pTransformer:
+      # loop indefinitely
+      componentCode &= "while 1:\n"
 
-    # block and get next element from in queue
-    componentCode &= "\tinput = in_queue.get()\n"
+      # block and get next element from in queue
+      componentCode &= "\tinput = in_queue.get()\n"
 
-    # TODO use unique sentinel value
-    # check if element from in queue is sentinel value
-    componentCode &= "\tif isinstance(input, PipeSentinel):\n"
+      # TODO use unique sentinel value
+      # check if element from in queue is sentinel value
+      componentCode &= "\tif isinstance(input, PipeSentinel):\n"
 
-    # put sentinel value in queue to next component
-    componentCode &= "\t\toutput = PipeSentinel()\n"
+      # put sentinel value in queue to next component
+      componentCode &= "\t\toutput = PipeSentinel()\n"
 
-    # else
-    componentCode &= "\telse:\n"
+      # else
+      componentCode &= "\telse:\n"
 
-    # otherwise, get output from passing element into component
-    componentCode &= "\t\toutput = " & component & "(input)\n"
+      # otherwise, get output from passing element into component
+      componentCode &= "\t\toutput = " & component & parameters & "\n"
 
-    # check if queue to next component exists
-    componentCode &= "\tif out_queue is not None:\n"
+      # check if queue to next component exists
+      componentCode &= "\tif out_queue is not None:\n"
 
-    # put output into queue to next component if queue to next component exists
-    componentCode &= "\t\tout_queue.put(output)\n"
+      # put output into queue to next component if queue to next component exists
+      componentCode &= "\t\tout_queue.put(output)\n"
 
-    # break if element from in queue is sentinel value
-    componentCode &= "\tif isinstance(input, PipeSentinel):\n"
-    componentCode &= "\t\tbreak\n"
+      # break if element from in queue is sentinel value
+      componentCode &= "\tif isinstance(input, PipeSentinel):\n"
+      componentCode &= "\t\tbreak\n"
+    # handle filter pipe
+    of pFilter:
+      # loop indefinitely
+      componentCode &= "while 1:\n"
+
+      # block and get next element from in queue
+      componentCode &= "\tinput = in_queue.get()\n"
+
+      # TODO use unique sentinel value
+      # check if element from in queue is sentinel value
+      componentCode &= "\tif isinstance(input, PipeSentinel):\n"
+      # put sentinel value in queue to next component
+      componentCode &= "\t\toutput = PipeSentinel()\n"
+
+      # otherwise, get output from passing element into component
+      componentCode &= "\telse:\n"
+      componentCode &= "\t\tif " & component & parameters & ":\n" # send input through filter
+      componentCode &= "\t\t\toutput = input\n" # pass on input as output
+      componentCode &= "\t\telse:\n"
+      componentCode &= "\t\t\tcontinue\n" # otherwise continue to next input
+
+      # check if queue to next component exists
+      componentCode &= "\tif out_queue is not None:\n"
+      # put output into queue to next component if queue to next component exists
+      componentCode &= "\t\tout_queue.put(output)\n"
+
+      # break if element from in queue is sentinel value
+      componentCode &= "\tif isinstance(input, PipeSentinel):\n"
+      componentCode &= "\t\tbreak\n"
 
     # append component code to code
-    code &= "def run_" & component & "(in_queue, out_queue):\n"
-    code &= componentCode.indent(1, "\t") & "\n"
+    code &= "def run_" & component & "(in_queue, out_queue):\n" # function header
+    componentCode.removeSuffix("\n") # remove last newline
+    code &= componentCode.indent(1, "\t") & "\n" # indent and add newline
 
   # MAIN
 
@@ -136,11 +218,7 @@ proc compile*(path: string): string =
     pipeIndex += 1
 
   # load all data from generator into queue to first component
-  mainCode &= "for data in stream:\n"
-  mainCode &= "\tin_" & pipes[0].destination & ".put(data)\n"
-
-  # load sentinel value into queue
-  mainCode &= "in_" & pipes[0].destination & ".put(PipeSentinel())\n"
+  mainCode &= "run_" & generatorName & "(stream, in_" & pipes[0].destination & ")\n" 
 
   # start processes
   for pipe in pipes:
@@ -158,10 +236,14 @@ proc compile*(path: string): string =
 
   # append main code to code
   code &= "if __name__ == \"__main__\":\n"
-  code &= mainCode.indent(1, "\t") & "\n"
+  mainCode.removeSuffix("\n") # remove last newline
+  code &= mainCode.indent(1, "\t") & "\n" # indent main code and add newline
 
   # return code
   result = code
+
+  if debug:
+    echo(code)
 
 # runs pipeline document at given path
 proc runFile*(path: string) =
