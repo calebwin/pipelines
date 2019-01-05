@@ -21,7 +21,7 @@ numbers
 Meanwhile, the implementation of the components would be written in Python -
 
 ```python
-def generator():
+def numbers():
     for number in range(1, 100):
         yield number
 
