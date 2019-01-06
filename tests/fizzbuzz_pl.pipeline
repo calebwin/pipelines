@@ -1,8 +1,9 @@
-numbers  from fizzbuzz/numbers
-even     from fizzbuzz/even
+numbers  from fizzbuzz/numbers # a sequence of numbers
+even     from fizzbuzz/even # a filter for even numbers
 fizzbuzz from fizzbuzz/fizzbuzz
 printer  from fizzbuzz/printer
 
-numbers /> even 
-|> fizzbuzz where (number=*, fizz="Foo", buzz="Bar")
+numbers
+/> even
+|> fizzbuzz
 |> printer
