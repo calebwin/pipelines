@@ -6,25 +6,34 @@ Pipeline is a framework & language for crafting massively parallel pipelines. Un
 
 As an example, a pipeline for Fizz Buzz could be written as follows -
 
-```
-generator from fizzbuzz/generator
-fizzbuzz  from fizzbuzz/fizzbuzz
-printer   from fizzbuzz/printer
+```python
+numbers  from fizzbuzz/numbers
+even     from fizzbuzz/even
+fizzbuzz from fizzbuzz/fizzbuzz
+printer  from fizzbuzz/printer
 
-generator | fizzbuzz | printer
+numbers 
+/> even 
+|> fizzbuzz where (number=*, fizz="Fizz", buzz="Buzz")
+|> printer
 ```
 
 Meanwhile, the implementation of the components would be written in Python -
 
 ```python
-def generator():
+def numbers():
     for number in range(1, 100):
         yield number
-def fizzbuzz(number):
-    if number % 15 == 0: return "FizzBuzz"
-    elif number % 3 == 0: return "Fizz"
-    elif number % 5 == 0: return "Buzz"
+
+def even(number):
+    return even % 2 == 0
+
+def fizzbuzz(number, fizz, buzz):
+    if number % 15 == 0: return fizz + buzz
+    elif number % 3 == 0: return fizz
+    elif number % 5 == 0: return buzz
     else: return number
+
 def printer(number):
     print(number)
 ```
