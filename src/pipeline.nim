@@ -58,8 +58,8 @@ proc compile*(path: string): string =
       let
         nextToken: string = tokens[tokenIndex + 1] # next token from contents
         newPathAlias: string = tokens[tokenIndex - 1] # alias of new path
-        newPathModule: string = nextToken[0 .. nextToken.rfind("/") - 1] # module for new path
-        newPathFunction: string = nextToken[nextToken.rfind("/") + 1 .. nextToken.len - 1] # function for new path
+        newPathModule: string = nextToken[0 .. nextToken.rfind(".") - 1] # module for new path
+        newPathFunction: string = nextToken[nextToken.rfind(".") + 1 .. nextToken.len - 1] # function for new path
         newPath: Path = (module : newPathModule, function : newPathFunction) # new path
 
       # add new path to paths

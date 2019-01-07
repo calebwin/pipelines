@@ -1,7 +1,7 @@
-numbers  from fizzbuzz/numbers # a sequence of numbers
-even     from fizzbuzz/even # a filter for even numbers
-fizzbuzz from fizzbuzz/fizzbuzz
-printer  from fizzbuzz/printer
+numbers  from fizzbuzz.numbers # a sequence of numbers
+even     from fizzbuzz.even # a filter for even numbers
+fizzbuzz from fizzbuzz.fizzbuzz
+printer  from fizzbuzz.printer
 
 numbers
 /> even
