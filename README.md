@@ -7,10 +7,10 @@ Pipeline is a framework & language for crafting massively parallel pipelines. Un
 As an example, a pipeline for Fizz Buzz could be written as follows -
 
 ```python
-numbers  from fizzbuzz/numbers
-even     from fizzbuzz/even
-fizzbuzz from fizzbuzz/fizzbuzz
-printer  from fizzbuzz/printer
+numbers  from fizzbuzz.numbers
+even     from fizzbuzz.even
+fizzbuzz from fizzbuzz.fizzbuzz
+printer  from fizzbuzz.printer
 
 numbers 
 /> even 
