@@ -39,3 +39,6 @@ def printer(number):
 ```
 
 Running the Pipeline document would safely execute each component of the pipeline in parallel and output the expected result.
+
+### Some next steps
+There are several things I'm hoping to implement in the future for this projects. The highest priority features are robust imports, support for importing other pipelines, support for running pipelines in parrallel from the CLI. I would also like to add an `add` operator for piping data from the stream into multiple components in parallel with the output ending up in the stream in a nondeterministic order. Another thing I think would be quite useful would be support for handling multiple returns from a component. Lastly, I want to implement functionality for persisting data coupled to specific components. Further down the line, I will port the whole thing to C and put in a complete error handling system
