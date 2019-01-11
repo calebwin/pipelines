@@ -26,7 +26,7 @@ proc compile*(path: string): string =
     token: string = ""
     index: int = 0
 
-  # iterate through characters in contents
+  # iterate through characters in contents and tokenize
   while index <= contents.len - 1:
     let character: string = $contents[index] # get character at current index
 
@@ -56,10 +56,9 @@ proc compile*(path: string): string =
     of "from":
       # parse import statement
       let
-        nextToken: string = tokens[tokenIndex + 1] # next token from contents
         newPathAlias: string = tokens[tokenIndex - 1] # alias of new path
-        newPathModule: string = nextToken[0 .. nextToken.rfind(".") - 1] # module for new path
-        newPathFunction: string = nextToken[nextToken.rfind(".") + 1 .. nextToken.len - 1] # function for new path
+        newPathModule: string = tokens[tokenIndex + 1] # module for new path
+        newPathFunction: string = tokens[tokenIndex + 1 + 2] # function for new path
         newPath: Path = (module : newPathModule, function : newPathFunction) # new path
 
       # add new path to paths
