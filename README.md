@@ -1,4 +1,4 @@
-![](https://i.imgur.com/ev39mql.png)
+![](https://i.imgur.com/rAo2Pfc.png)
 
 Pipeline is a framework & language for crafting massively parallel pipelines. Unlike other languages for defining data flow, Pipeline requires the implementation of components to be written in Python and linked into the Pipeline document. This allows the details of implementations to be separated from the structure of the pipeline.
 
