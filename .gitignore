@@ -1,2 +1,2 @@
-src/pipelines
-src/nimcache/
+pipelines/pipelines
+pipelines/nimcache/
