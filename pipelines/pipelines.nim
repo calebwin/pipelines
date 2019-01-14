@@ -337,7 +337,7 @@ proc main() =
   of 0:
     # print welcome message
     echo("Welcome to Pipelines!")
-    echo("v:0.0.1")
+    echo("v:0.1.0")
   of 1:
     # get path to file to run
     let path: string = paramStr(1)

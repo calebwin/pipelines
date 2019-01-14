@@ -1,0 +1,21 @@
+{"compile":[
+],
+"link":[
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/pipelines_pipelines.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_system.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/python_python.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_dynlib.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_strutils.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_parseutils.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_math.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_algorithm.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_os.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_times.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_posix.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_ospaths.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_sequtils.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_tables.o",
+"/home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_hashes.o"
+],
+"linkcmd": "gcc   -o /home/calebwin/Projects/pipelines/pipelines/pipelines  /home/calebwin/Projects/pipelines/pipelines/nimcache/pipelines_pipelines.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_system.o /home/calebwin/Projects/pipelines/pipelines/nimcache/python_python.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_dynlib.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_strutils.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_parseutils.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_math.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_algorithm.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_os.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_times.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_posix.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_ospaths.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_sequtils.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_tables.o /home/calebwin/Projects/pipelines/pipelines/nimcache/stdlib_hashes.o  -lm -lrt   -ldl"
+}
