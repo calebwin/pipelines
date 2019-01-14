@@ -1,7 +1,7 @@
 import python # TODO support python3
 import os, strutils, sequtils, tables
 
-const debug = true
+const debug = false
 
 type
   Path = tuple[module: string, function: string] # path to a function - defined by name of module and name of function in it
