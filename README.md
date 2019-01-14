@@ -119,6 +119,24 @@ atoms
 ```
 Note the use of the `with` keyword here. This is necessary for filters to specify which return value of the function is used to filter out elements in the stream.
 
+### Getting started
+
+The easiest way to get started is with [Nimble](https://github.com/nim-lang/nimble/). Make sure you have Nimble installed and `~/.nimble/bin` added to your PATH environment variable (look this up if you don't know how to do this). Then all you have to do is run the following command.
+```
+nimble install pipelines
+```
+With Pipelines installed with Nimble, you can simply create a `.pipeline` file anywhere and run it as follows-
+```
+pipelines my_pipeline.pipeline
+pipelines r my_pipeline.pipeline
+pipelines run my_pipeline.pipeline
+```
+You can compile a `.pipeline` file to Python as follows -
+```
+pipelines c my_pipeline.pipeline
+pipelines compile my_pipeline.pipeline
+```
+
 ### Some next steps
 
 There are several things I'm hoping to implement in the future for this project. I'm hoping to implement some sort of `and` operator for piping data from the stream into multiple components in parallel with the output ending up in the stream in a nondeterministic order. Further down the line, I plan on porting the whole thing to C and putting in a complete error handling system
