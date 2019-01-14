@@ -1,14 +1,15 @@
 def numbers():
-	for number in range(1, 100):
+	for number in range(1, 101):
 		yield number
 
-def even(number):
-	return number % 2 == 0
+def even(number, counter):
+	print(counter)
+	return number % 2 == 0, 0 if counter is None else counter + 1
 
-def fizzbuzz(number):
-	if number % 15 == 0: return "fizz" + "buzz"
-	elif number % 3 == 0: return "fizz"
-	elif number % 5 == 0: return "buzz"
+def fizzbuzz(number, fizz, buzz):
+	if number % 15 == 0: return fizz + buzz
+	elif number % 3 == 0: return fizz
+	elif number % 5 == 0: return buzz
 	else: return number
 
 def printer(number):
