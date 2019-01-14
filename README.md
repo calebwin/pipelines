@@ -4,7 +4,7 @@ Pipelines is a framework & language for crafting massively parallel pipelines. U
 
 ### An example
 
-As an introductory example, a simple pipeline for Fizz Buzz could be written as follows -
+As an introductory example, a simple pipeline for Fizz Buzz on even numbers could be written as follows -
 
 ```python
 from fizzbuzz import numbers  as numbers
