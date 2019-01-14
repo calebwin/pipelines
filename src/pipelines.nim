@@ -160,15 +160,15 @@ proc compile*(path: string): string =
   # FUNCTIONS
 
   # define pipe sentinel
-  code &= "class PipeSentinel: pass\n"
+  code &= "class PLPipeSentinel: pass\n"
 
   # define function to run generator
   let generatorName: string = pipes[0].origin
 
-  code &= "def run_" & generatorName & "(stream, out_queue):\n"
-  code &= "\tfor data in stream:\n"
-  code &= "\t\tout_queue.put(data)\n"
-  code &= "\tout_queue.put(PipeSentinel())\n"
+  code &= "def pl_run_" & generatorName & "(pl_stream, pl_out_queue):\n"
+  code &= "\tfor pl_data in pl_stream:\n"
+  code &= "\t\tpl_out_queue.put(pl_data)\n"
+  code &= "\tpl_out_queue.put(PLPipeSentinel())\n"
 
   # define functions for process for each component
   var componentIndex: int = 0
@@ -176,7 +176,7 @@ proc compile*(path: string): string =
     let 
       component: string = pipe.destination # destination of pipe ~ the component to define a function for
       modifiers: tuple[mWhere: string, mTo: string, mWith: string] = pipe.modifiers # modifiers of pipe
-      parameters: string = if modifiers.mWhere.len > 0: modifiers.mWhere.replace("*", "inp") else: "(inp)" # parameters of pipe
+      parameters: string = if modifiers.mWhere.len > 0: modifiers.mWhere.replace("*", "pl_inp") else: "(pl_inp)" # parameters of pipe
       inputs: string = if componentIndex > 0: pipes[componentIndex - 1].modifiers.mTo.replace("(", "").replace(")", "") else: "" # names of inputs into current compoent
       # TODO handle with modifier
 
@@ -190,56 +190,56 @@ proc compile*(path: string): string =
     componentCode &= "while 1:\n"
 
     # block and get next element from in queue`
-    componentCode &= "\tinp = in_queue.get()\n"
+    componentCode &= "\tpl_inp = pl_in_queue.get()\n"
 
     # unpackaget tuple input and reate local variables to access inputs if necessary
     # this is only done when input is from a transformer pipe (filter pipes always have only one input)
     if inputs != "" and pipes[componentIndex - 1].pipeType == pTransformer:
-      componentCode &= "\t" & inputs & " = inp\n"
+      componentCode &= "\t" & inputs & " = pl_inp\n"
 
     # TODO use unique sentinel value
     # check if element from in queue is sentinel value
-    componentCode &= "\tif isinstance(inp, PipeSentinel):\n"
+    componentCode &= "\tif isinstance(pl_inp, PLPipeSentinel):\n"
     # put sentinel value in queue to next component
-    componentCode &= "\t\toutp = PipeSentinel()\n"
+    componentCode &= "\t\tpl_outp = PLPipeSentinel()\n"
 
     case pipe.pipeType:
     of pTransformer:
       # get output from passing element into component if element is not sentinel
-      componentCode &= "\tif not isinstance(inp, PipeSentinel):\n"
-      componentCode &= "\t\toutp = " & component & parameters & "\n"
+      componentCode &= "\tif not isinstance(pl_inp, PLPipeSentinel):\n"
+      componentCode &= "\t\tpl_outp = " & component & parameters & "\n"
       # unpackage output and update to variables
       if modifiers.mTo.len > 0:
-        componentCode &= "\t\t" & modifiers.mTo.replace("(", "").replace(")", "") & " = outp\n"
+        componentCode &= "\t\t" & modifiers.mTo.replace("(", "").replace(")", "") & " = pl_outp\n"
     of pFilter:
       # get output from passing element into component if element is not sentinel
-      componentCode &= "\tif not isinstance(inp, PipeSentinel):\n"
-      componentCode &= "\t\tresult = " & component & parameters & "\n"
+      componentCode &= "\tif not isinstance(pl_inp, PLPipeSentinel):\n"
+      componentCode &= "\t\tpl_result = " & component & parameters & "\n"
       if modifiers.mTo.len > 0:
-        componentCode &= "\t\t" & modifiers.mTo.replace("(", "").replace(")", "") & " = result\n" # unpackage output and update to variables
+        componentCode &= "\t\t" & modifiers.mTo.replace("(", "").replace(")", "") & " = pl_result\n" # unpackage output and update to variables
       if modifiers.mWith.len > 0:
         componentCode &= "\t\tif " & modifiers.mWith.replace("(", "").replace(")", "") & ":\n" # send input through filter  
       else:
-        componentCode &= "\t\tif result:\n" # send input through filter
-      componentCode &= "\t\t\toutp = inp\n" # pass on input as output
+        componentCode &= "\t\tif pl_result:\n" # send input through filter
+      componentCode &= "\t\t\tpl_outp = pl_inp\n" # pass on input as output
       componentCode &= "\t\telse:\n"
       componentCode &= "\t\t\tcontinue\n" # otherwise continue to next input
 
     # check if queue to next component exists
-    componentCode &= "\tif out_queue is not None:\n"
+    componentCode &= "\tif pl_out_queue is not None:\n"
 
     # put output into queue to next component if queue to next component exists
-    componentCode &= "\t\tout_queue.put(outp)\n"
+    componentCode &= "\t\tpl_out_queue.put(pl_outp)\n"
 
     # break if element from in queue is sentinel value
-    componentCode &= "\tif isinstance(inp, PipeSentinel):\n"
+    componentCode &= "\tif isinstance(pl_inp, PLPipeSentinel):\n"
     componentCode &= "\t\tbreak\n"
 
     # update index of component
     componentIndex += 1
 
     # append component code to code
-    code &= "def run_" & component & "(in_queue, out_queue):\n" # function header
+    code &= "def pl_run_" & component & "(pl_in_queue, pl_out_queue):\n" # function header
     componentCode.removeSuffix("\n") # remove last newline
     code &= componentCode.indent(1, "\t") & "\n" # indent and add newline
 
@@ -247,45 +247,48 @@ proc compile*(path: string): string =
 
   # get iterator over stream of data
   let iteratorModule: string = pipes[0].origin
-  mainCode &= "data = " & iteratorModule & "()\n"
+  mainCode &= "pl_data = " & iteratorModule & "()\n"
 
   # create queues into components
   for pipe in pipes:
     let component: string = pipe.destination # component to create a queue into
 
     # create queue into component
-    mainCode &= "in_" & component & " = Queue()\n"
+    mainCode &= "pl_in_" & component & " = Queue()\n"
+
+  # create process for generator
+  mainCode &= "pl_" & generatorName & "_process = Process(target=pl_run_" & generatorName & ", args=(pl_data, pl_in_" & pipes[0].destination & "))\n"
 
   # create processes for each component
   var pipeIndex: int = 0
   for pipe in pipes:
     let 
       component: string = pipes[pipeIndex].destination # component to create process for
-      componentQueue: string = "in_" & component # queue to component to create process for
-      nextComponentQueue: string = if pipeIndex < pipes.len - 1: "in_" & pipes[pipeIndex + 1].destination else: "None" # queue to next component in pipeline
+      componentQueue: string = "pl_in_" & component # queue to component to create process for
+      nextComponentQueue: string = if pipeIndex < pipes.len - 1: "pl_in_" & pipes[pipeIndex + 1].destination else: "None" # queue to next component in pipeline
 
     # creat process for component passing in queue to the component and queue to next component
-    mainCode &= component & "_process = Process(target=run_" & component & ", args=(" & componentQueue  & ","  & nextComponentQueue & ",))\n"
+    mainCode &= "pl_" & component & "_process = Process(target=pl_run_" & component & ", args=(" & componentQueue  & ","  & nextComponentQueue & ",))\n"
 
     # update index in pipes
     pipeIndex += 1
 
-  # load all data from generator into queue to first component
-  mainCode &= "run_" & generatorName & "(data, in_" & pipes[0].destination & ")\n" 
+  # start generator process
+  mainCode &= "pl_" & generatorName & "_process.start()\n"
 
   # start processes
   for pipe in pipes:
     let component: string = pipe.destination # component to start process of
 
     # start process of component
-    mainCode &= component & "_process.start()\n"
+    mainCode &= "pl_" & component & "_process.start()\n"
 
   # block main process till all process have finished
   for pipe in pipes:
     let component: string = pipe.destination # component to join process of
 
     # join process of component
-    mainCode &= component & "_process.join()\n"
+    mainCode &= "pl_" & component & "_process.join()\n"
 
   # append main code to code
   code &= "if __name__ == \"__main__\":\n"
@@ -333,7 +336,7 @@ proc main() =
   case paramCount():
   of 0:
     # print welcome message
-    echo("Welcome to Pipeline!")
+    echo("Welcome to Pipelines!")
     echo("v:0.0.1")
   of 1:
     # get path to file to run

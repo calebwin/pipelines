@@ -3,7 +3,6 @@ def numbers():
 		yield number
 
 def even(number, counter):
-	print(counter)
 	return number % 2 == 0, 0 if counter is None else counter + 1
 
 def fizzbuzz(number, fizz, buzz):
