@@ -1,5 +1,7 @@
 ![](https://i.imgur.com/NB7T4pY.png)
 
+[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://nimble.directory/pkg/pipelines)
+
 Pipelines is a framework & language for crafting massively parallel pipelines. Unlike other languages for defining data flow, the Pipeline language requires implementation of components to be defined seperately in Python. This allows the details of implementations to be separated from the structure of the pipeline.
 
 ### An example
