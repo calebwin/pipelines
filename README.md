@@ -116,7 +116,7 @@ atoms
 Here's an example using a filter.
 ```python
 atoms
-/> below where (limit=2) to (is_below, electronegativity, electron_affinity) with is_below
+/> below where (atom=*, limit=2) to (is_below, electronegativity, electron_affinity) with is_below
 |> printer where (line=electronegativity)
 ```
 Note the use of the `with` keyword here. This is necessary for filters to specify which return value of the function is used to filter out elements in the stream.
