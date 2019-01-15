@@ -1,4 +1,4 @@
-![](https://i.imgur.com/NB7T4pY.png)
+![](https://i.imgur.com/gLLsD3t.png)
 
 [![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://nimble.directory/pkg/pipelines)
 
