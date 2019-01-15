@@ -1,4 +1,4 @@
-![](https://i.imgur.com/cQrWo6g.png)
+![](https://i.imgur.com/NB7T4pY.png)
 
 Pipelines is a framework & language for crafting massively parallel pipelines. Unlike other languages for defining data flow, the Pipeline language requires implementation of components to be defined seperately in Python. This allows the details of implementations to be separated from the structure of the pipeline.
 
