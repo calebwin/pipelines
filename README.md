@@ -70,9 +70,9 @@ def customers():
 ```
 The first component in a pipeline is always the generator. The generator is run in parallel with all other components and each element of data is passed through the other components.
 ```python
-from utils import customers as customers # a generator function in the utils module
-from utils import parse_row as parser
-from utils import get_recommendations as recommender
+from utils import customers             as customers # a generator function in the utils module
+from utils import parse_row             as parser
+from utils import get_recommendations   as recommender
 from utils import print_recommendations as printer
 
 customers |> parse_row |> recommender |> printer
