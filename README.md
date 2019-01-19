@@ -1,11 +1,3 @@
-![](https://i.imgur.com/P86OBG9.png)
-
-[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://nimble.directory/pkg/pipelines)
-
-[![Build Status](https://nimble.directory/ci/badges/jester/nimdevel/status.svg)](https://nimble.directory/ci/badges/jester/nimdevel/output.html)
-[![Build Status](https://nimble.directory/ci/badges/jester/nimdevel/docstatus.svg)](https://nimble.directory/ci/badges/jester/nimdevel/doc_build_output.html)
-      
-
 Pipelines is a framework & language for crafting massively parallel pipelines. Unlike other languages for defining data flow, the Pipeline language requires implementation of components to be defined seperately in Python. This allows the details of implementations to be separated from the structure of the pipeline.
 
 ### An example
