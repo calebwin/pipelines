@@ -26,7 +26,7 @@ def numbers():
         yield number
 
 def even(number):
-    return even % 2 == 0
+    return number % 2 == 0
 
 def fizzbuzz(number, fizz, buzz):
     if number % 15 == 0: return fizz + buzz
