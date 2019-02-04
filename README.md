@@ -69,7 +69,7 @@ from utils import parse_row             as parser
 from utils import get_recommendations   as recommender
 from utils import print_recommendations as printer
 
-customers |> parse_row |> recommender |> printer
+customers |> parser |> recommender |> printer
 ```
 
 ### The pipes
