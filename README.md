@@ -1,6 +1,5 @@
 ![](https://i.imgur.com/YfK7YdY.png)
 <!--- https://i.imgur.com/rbx2Hlh.png or https://i.imgur.com/YfK7YdY.png) --->
----
 
 Pipelines is a language and runtime for crafting massively parallel pipelines. Unlike other languages for defining data flow, the Pipeline language requires implementation of components to be defined seperately in the Python scripting language. This allows the details of implementations to be separated from the structure of the pipeline, while providing access to thousands of active libraries for machine learning, data analysis and processing.
 
