@@ -139,7 +139,6 @@ usage:
   pipelines clean <folder> Remove all compiled .py files from folder
 
 for more info, go to github.com/calebwin/pipelines
-calebwin@ubuntu:~$ 
 ```
 
 ### Some next steps
