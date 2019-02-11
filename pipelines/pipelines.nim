@@ -56,9 +56,9 @@ proc compile*(path: string): string =
     of "import":
       # parse import statement
       let
-        newPathAlias: string = tokens[tokenIndex + 1 + 2] # alias of new path
         newPathModule: string = tokens[tokenIndex - 1] # module for new path
         newPathFunction: string = tokens[tokenIndex + 1] # function for new path
+        newPathAlias: string = if tokens[tokenIndex + 1 + 1] == "as": tokens[tokenIndex + 1 + 2] else: newPathFunction # alias of new path
         newPath: Path = (module : newPathModule, function : newPathFunction) # new path
 
       # add new path to paths
@@ -336,14 +336,31 @@ proc main() =
   case paramCount():
   of 0:
     # print welcome message
-    echo("Welcome to Pipelines!")
-    echo("v:0.1.0")
+    echo("the .pipeline compiler (v:0.1.0)\n")
+
+    # print usage
+    echo("usage:")
+    echo("  pipelines                Show this")
+    echo("  pipelines <file>         Compile .pipeline file")
+    echo("  pipelines <folder>       Compile all .pipeline files in folder")
+    echo("  pipelines run <file>     Run .pipeline file")
+    echo("  pipelines clean <folder> Remove all compiled .py files from folder\n")
+
+    # print info
+    echo("for more info, go to github.com/calebwin/pipelines")
   of 1:
     # get path to file to run
     let path: string = paramStr(1)
 
     # run file
-    runFile(path)
+    if fileExists(path):
+      compileFile(path)
+    elif dirExists(path):
+      for kind, file in walkDir(path):
+        if file.endsWith(".pipleine"):
+          compileFile(file)
+    else:
+      echo(path & " not found")
   of 2:
     case paramStr(1):
     of "r", "run":
@@ -351,13 +368,26 @@ proc main() =
       let path: string = paramStr(2)
 
       # run file
-      runFile(path)
-    of "c", "compile":
-      # get path to file to compile
+      if existsFile(path):
+        runFile(path)
+      elif existsDir(path):
+        for kind, file in walkDir(path):
+          if file.endsWith(".pipeline"):
+            runFile(file)
+      else:
+        echo(path & " not found")
+    of "c", "clean":
+      # get path to folder to clean
       let path: string = paramStr(2)
 
-      # compile file
-      compileFile(path)
+      # clean folder
+      for kind, file in walkDir(path):
+        # compiled .py file
+        let compiledFile: string = if file.endsWith(".pipeline"): file.replace(".pipeline", ".py") else: ""
+
+        # remove compiled file if it exists
+        if compiledFile != "":
+          removeFile(compiledFile)
   else:
     discard
 

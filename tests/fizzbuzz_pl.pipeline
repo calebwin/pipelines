@@ -1,9 +1,0 @@
-from fizzbuzz import numbers  as numbers # a sequence of numbers
-from fizzbuzz import even     as even # a filter for even numbers
-from fizzbuzz import fizzbuzz as fizzbuzz
-from fizzbuzz import printer  as printer
-
-numbers
-/> even     where (number=*, counter=count) to (is_even, count) with is_even
-|> fizzbuzz where (number=*, fizz="fizz", buzz="buzz") to (number)
-|> printer  where (number=number)
