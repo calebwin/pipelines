@@ -121,21 +121,25 @@ atoms
 Note the use of the `with` keyword here. This is necessary for filters to specify which return value of the function is used to filter out elements in the stream.
 
 ### Getting started
+All you need to get started is the Pipelines compiler. You can install it by downloaded the executable from [Releases](https://github.com/calebwin/pipelines/releases).
+> If you have the [Nimble](https://github.com/nim-lang/nimble/) package manager installed and `~/.nimble/bin` permanantly added to your PATH environment variable (look this up > if you don't know how to do this), you can also install by running the following command.
+> ```
+> nimble install pipelines
+> ```
+Pipelines' only dependancy is [the Python interpreter](https://www.python.org/downloads/release/python-2715/) being installed on your system. At the moment, most versions 2.7 and earlier are supported and support for Python 3 is in the works. Once Pipelines is installed and added to your PATH, you can create a `.pipeline` file, run or compile anywhere on your system -
+```console
+calebwin@ubuntu:~$ pipelines
+the .pipeline compiler (v:0.1.0)
 
-The easiest way to get started is with [Nimble](https://github.com/nim-lang/nimble/). Make sure you have Nimble installed and `~/.nimble/bin` added to your PATH environment variable (look this up if you don't know how to do this). Then all you have to do is run the following command.
-```
-nimble install pipelines
-```
-With Pipelines installed with Nimble, you can simply create a `.pipeline` file anywhere and run it as follows-
-```
-pipelines my_pipeline.pipeline
-pipelines r my_pipeline.pipeline
-pipelines run my_pipeline.pipeline
-```
-You can compile a `.pipeline` file to Python as follows -
-```
-pipelines c my_pipeline.pipeline
-pipelines compile my_pipeline.pipeline
+usage:
+  pipelines                Show this
+  pipelines <file>         Compile .pipeline file
+  pipelines <folder>       Compile all .pipeline files in folder
+  pipelines run <file>     Run .pipeline file
+  pipelines clean <folder> Remove all compiled .py files from folder
+
+for more info, go to github.com/calebwin/pipelines
+calebwin@ubuntu:~$ 
 ```
 
 ### Some next steps
