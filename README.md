@@ -8,10 +8,10 @@ Pipelines is a language and runtime for crafting massively parallel pipelines. U
 As an introductory example, a simple pipeline for Fizz Buzz on even numbers could be written as follows -
 
 ```python
-from fizzbuzz import numbers  as numbers
-from fizzbuzz import even     as even
-from fizzbuzz import fizzbuzz as fizzbuzz
-from fizzbuzz import printer  as printer
+from fizzbuzz import numbers
+from fizzbuzz import even
+from fizzbuzz import fizzbuzz
+from fizzbuzz import printer
 
 numbers
 /> even 
