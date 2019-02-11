@@ -311,9 +311,9 @@ proc runFile*(path: string) =
 
   # add directory containing .pipeline file to PYTHONPATH
   when defined windows:
-    syssetpath($(getPath()) & ";" & path[0 .. path.rfind("/")])
+    syssetpath($getPath() & ";" & path[0 .. path.rfind("/")])
   else:
-    syssetpath($(getPath()) & ":" & path[0 .. path.rfind("/")])
+    syssetpath($getPath() & ":" & path[0 .. path.rfind("/")])
 
   # run code
   discard runSimpleString(code)
@@ -352,15 +352,25 @@ proc main() =
     # get path to file to run
     let path: string = paramStr(1)
 
+    # files compiled
+    var filesCompiled: seq[string] = @[]
+
     # run file
     if fileExists(path):
       compileFile(path)
+      filesCompiled.add(path)
     elif dirExists(path):
       for kind, file in walkDir(path):
-        if file.endsWith(".pipleine"):
+        if file.endsWith(".pipeline"):
           compileFile(file)
+          filesCompiled.add(file)
     else:
       echo(path & " not found")
+
+    # print info
+    echo($filesCompiled.len & " " & (if filesCompiled.len == 1: "file" else: "files") & " compiled" & (if dirExists(path): " at " & path else: "") & ":")
+    for file in filesCompiled:
+      echo("  " & file)
   of 2:
     case paramStr(1):
     of "r", "run":
@@ -380,6 +390,9 @@ proc main() =
       # get path to folder to clean
       let path: string = paramStr(2)
 
+      # number of files removed
+      var filesRemoved: seq[string] = @[]
+
       # clean folder
       for kind, file in walkDir(path):
         # compiled .py file
@@ -388,6 +401,12 @@ proc main() =
         # remove compiled file if it exists
         if compiledFile != "":
           removeFile(compiledFile)
+          filesRemoved.add(compiledFile)
+
+      # print info
+      echo($filesRemoved.len & " " & (if filesRemoved.len == 1: "file" else: "files") & " removed from " & path & ":")
+      for file in filesRemoved:
+        echo("  " & file)
   else:
     discard
 
