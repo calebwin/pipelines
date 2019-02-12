@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.1"
+version       = "0.1.2"
 author        = "calebwin"
 description   = "A tiny framework & language for crafting massively parallel data pipelines"
 license       = "MIT"
