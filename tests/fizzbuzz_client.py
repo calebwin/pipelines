@@ -1,0 +1,3 @@
+import fizzbuzz
+
+fizzbuzz.execute()
