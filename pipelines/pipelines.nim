@@ -10,6 +10,7 @@ type
     pTransformer, pFilter
 
 # compiles pipeline document at given path to python code
+# TODO parallelize compilation
 proc compile*(path: string): string =
   # get contents of file
   let contents: string = readFile(path)
@@ -295,7 +296,7 @@ proc compile*(path: string): string =
   mainCode.removeSuffix("\n") # remove last newline
   code &= mainCode.indent(1, "\t") & "\n" # indent main code and add newline
 
-  # append main code to code as "execute" method
+  # TODO append main code to code as "execute" method
   code &= "def execute():\n"
   mainCode.removeSuffix("\n") # remove last newline
   code &= mainCode.indent(1, "\t") & "\n" # indent main code and add newline
