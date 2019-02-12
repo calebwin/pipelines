@@ -291,6 +291,11 @@ proc compile*(path: string): string =
     mainCode &= "pl_" & component & "_process.join()\n"
 
   # append main code to code
+  code &= "if __name__ == \"__main__\":\n"
+  mainCode.removeSuffix("\n") # remove last newline
+  code &= mainCode.indent(1, "\t") & "\n" # indent main code and add newline
+
+  # append main code to code as "execute" method
   code &= "def execute():\n"
   mainCode.removeSuffix("\n") # remove last newline
   code &= mainCode.indent(1, "\t") & "\n" # indent main code and add newline

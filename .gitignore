@@ -1,3 +1,4 @@
-pipelines/pipelines
+piipelines/pipelines
 pipelines/nimcache/
-*~
+*i~
+*.pyc
