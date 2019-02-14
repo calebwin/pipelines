@@ -122,7 +122,7 @@ atoms
 Note the use of the `with` keyword here. This is necessary for filters to specify which return value of the function is used to filter out elements in the stream.
 
 ### Getting started
-All you need to get started is the Pipelines compiler. You can install it by downloaded the executable from [Releases](https://github.com/calebwin/pipelines/releases).
+All you need to get started is the Pipelines compiler. You can install it by downloading the executable from [Releases](https://github.com/calebwin/pipelines/releases).
 > If you have the [Nimble](https://github.com/nim-lang/nimble/) package manager installed and `~/.nimble/bin` permanantly added to your PATH environment variable (look this up > if you don't know how to do this), you can also install by running the following command.
 > ```
 > nimble install pipelines
