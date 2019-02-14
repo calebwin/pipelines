@@ -129,7 +129,7 @@ All you need to get started is the Pipelines compiler. You can install it by dow
 > ```
 Pipelines' only dependancy is [the Python interpreter](https://www.python.org/downloads/release/python-2715/) being installed on your system. At the moment, most versions 2.7 and earlier are supported and support for Python 3 is in the works. Once Pipelines is installed and added to your PATH, you can create a `.pipeline` file, run or compile anywhere on your system -
 ```console
-calebwin@ubuntu:~$ pipelines
+$ pipelines
 the .pipeline compiler (v:0.1.0)
 
 usage:
