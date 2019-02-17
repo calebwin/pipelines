@@ -61,7 +61,7 @@ def numbers():
 Here's a generator that reads entries from a file
 ```python
 def customers():
-    for line in "customers.csv":
+    for line in open("customers.csv", 'r'):
         yield line
 ```
 The first component in a pipeline is always the generator. The generator is run in parallel with all other components and each element of data is passed through the other components.
