@@ -145,3 +145,9 @@ for more info, go to github.com/calebwin/pipelines
 ### Some next steps
 
 There are several things I'm hoping to implement in the future for this project. I'm hoping to implement some sort of `and` operator for piping data from the stream into multiple components in parallel with the output ending up in the stream in a nondeterministic order. Further down the line, I plan on porting the whole thing to C and putting in a complete error handling system
+<!---
+- String imports
+- Control allocation of processes with Pool
+- Use Pipe instead of multiple Queue
+- Only have num_cpus running at one time
+--->
