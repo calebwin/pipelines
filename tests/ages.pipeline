@@ -1,0 +1,8 @@
+from ages_utils import ages
+from ages_utils import age_segment
+from ages_utils import is_under_age
+from ages_utils import print_age
+
+# TODO fix error where you need to have a line at end
+
+ages |> age_segment /> is_under_age |> print_age
