@@ -1,5 +1,6 @@
-![](https://i.imgur.com/YfK7YdY.png)
+![](https://i.imgur.com/rbx2Hlh.png<!--https://i.imgur.com/YfK7YdY.png-->)
 <!--- https://i.imgur.com/rbx2Hlh.png or https://i.imgur.com/YfK7YdY.png) --->
+<!--- https://carbon.now.sh/?bg=rgba(239%2C228%2C176%2C1)&t=zenburn&wt=none&l=python&ds=true&dsyoff=20px&dsblur=68px&wc=false&wa=true&pv=56px&ph=56px&ln=false&fm=Ubuntu%20Mono&fs=17px&lh=136%25&si=false&code=from%2520utils%2520import%2520customers%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520as%2520customers%2520%2523%2520a%2520generator%2520function%2520in%2520the%2520utils%2520module%250Afrom%2520utils%2520import%2520parse_row%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520as%2520parser%250Afrom%2520utils%2520import%2520get_recommendations%2520%2520%2520as%2520recommender%250Afrom%2520utils%2520import%2520print_recommendations%2520as%2520printer%250A%250Acustomers%2520%257C%253E%2520parser%2520%257C%253E%2520recommender%2520%257C%253E%2520printer&es=2x&wm=false --->
 
 Pipelines is a language and runtime for crafting massively parallel pipelines. Unlike other languages for defining data flow, the Pipeline language requires implementation of components to be defined seperately in the Python scripting language. This allows the details of implementations to be separated from the structure of the pipeline, while providing access to thousands of active libraries for machine learning, data analysis and processing. Skip to [Getting Started](https://github.com/calebwin/pipelines#some-next-steps) to install the Pipeline compiler.
 
@@ -60,7 +61,7 @@ def numbers():
 Here's a generator that reads entries from a file
 ```python
 def customers():
-    for line in "customers.csv":
+    for line in open("customers.csv", 'r'):
         yield line
 ```
 The first component in a pipeline is always the generator. The generator is run in parallel with all other components and each element of data is passed through the other components.
@@ -121,14 +122,14 @@ atoms
 Note the use of the `with` keyword here. This is necessary for filters to specify which return value of the function is used to filter out elements in the stream.
 
 ### Getting started
-All you need to get started is the Pipelines compiler. You can install it by downloaded the executable from [Releases](https://github.com/calebwin/pipelines/releases).
+All you need to get started is the Pipelines compiler. You can install it by downloading the executable from [Releases](https://github.com/calebwin/pipelines/releases).
 > If you have the [Nimble](https://github.com/nim-lang/nimble/) package manager installed and `~/.nimble/bin` permanantly added to your PATH environment variable (look this up > if you don't know how to do this), you can also install by running the following command.
 > ```
 > nimble install pipelines
 > ```
-Pipelines' only dependancy is [the Python interpreter](https://www.python.org/downloads/release/python-2715/) being installed on your system. At the moment, most versions 2.7 and earlier are supported and support for Python 3 is in the works. Once Pipelines is installed and added to your PATH, you can create a `.pipeline` file, run or compile anywhere on your system -
+Pipelines' only dependency is [the Python interpreter](https://www.python.org/downloads/release/python-2715/) being installed on your system. At the moment, most versions 2.7 and earlier are supported and support for Python 3 is in the works. Once Pipelines is installed and added to your PATH, you can create a `.pipeline` file, run or compile anywhere on your system -
 ```console
-calebwin@ubuntu:~$ pipelines
+$ pipelines
 the .pipeline compiler (v:0.1.0)
 
 usage:
@@ -144,3 +145,9 @@ for more info, go to github.com/calebwin/pipelines
 ### Some next steps
 
 There are several things I'm hoping to implement in the future for this project. I'm hoping to implement some sort of `and` operator for piping data from the stream into multiple components in parallel with the output ending up in the stream in a nondeterministic order. Further down the line, I plan on porting the whole thing to C and putting in a complete error handling system
+<!---
+- String imports
+- Control allocation of processes with Pool
+- Use Pipe instead of multiple Queue
+- Only have num_cpus running at one time
+--->
